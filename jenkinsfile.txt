@@ -1,0 +1,52 @@
+pipeline {
+    agent any  // This means Jenkins will run the pipeline on any available agent
+    
+    environment {
+        // Environment variables can be defined here
+        MY_ENV_VAR = "some_value"
+    }
+    
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Commands for building the project, e.g., Maven, Gradle, etc.
+                    echo 'Building the project'
+                    sh 'mvn clean install'
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                script {
+                    // Commands for running unit tests
+                    echo 'Running tests'
+                    sh 'mvn test'
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                script {
+                    // Commands for deployment, e.g., to a test server
+                    echo 'Deploying to server'
+                    sh './deploy.sh'
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'The build was successful!'
+        }
+        failure {
+            echo 'The build failed!'
+        }
+        always {
+            echo 'Cleaning up after the build'
+        }
+    }
+}
